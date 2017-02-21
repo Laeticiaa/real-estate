@@ -7,9 +7,61 @@
 </head>
 
 <body>
-    <p>Welcome to
+    <h1>Comparateur de prix au metre carre:
+    </h1>
+
+    <p> Entrz l'url de l'annonce le bon coin:
         <%= message %>
     </p>
+
+    <form action="/" method="GET">
+        <input type="text" name="urlLBC" />
+        <button type="submit"> OK </button>
+    </form>
+
+    <h1> Donnees Le Bon Coin </h1>
+
+    <p>
+        Prix:
+        <%= price %>
+            </br>
+            Ville:
+            <%= city %>
+                </br>
+                Code postal:
+                <%= code_postal %>
+                    </br>
+                    Type:
+                    <%= type %>
+                        </br>
+                        Surface:
+                        <%= surface %>
+                            </br>
+                            Prix moyen au metre carre:
+                            <%= prixMoyLBC %>
+                                </br>
+    </p>
+
+    <h1> Comparaison avec le site Meilleur Agent a
+        <%= city %>
+    </h1>
+    <p>
+        Prix moyen d'un appatement:
+        <%= prixMoy_MA_Appartement %>
+            </br>
+            Prix moyen d'une maison:
+            <%= prixMoy_MA_Maison %>
+                </br>
+                Prix moyen du loyer/m2:
+                <%= prixMens_MA_Loyer %>
+                    </br>
+    </p>
+
+    <h1>Le prix moyen du metre carre du site le bon coin est
+        <%= msg %>
+            cher que celui du site du meilleur agent.
+    </h1>
+
 </body>
 
 </html>
