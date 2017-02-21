@@ -25,9 +25,8 @@ app.use( '/assets', express.static( 'assets' ) );
 
 // Creating a function which take the needed values 
 // However it's not automatic 
-function callLeboncoin() {
+function callLeboncoin( url ) {
     //creating a var for the url
-    var url = 'https://www.leboncoin.fr/ventes_immobilieres/1092947215.htm?ca=12_s'
 
     request( url, function ( error, response, html ) {
         if ( !error && response.statusCode == 200 ) {
@@ -37,7 +36,7 @@ function callLeboncoin() {
             var lbcData = {
                 PriceLBC: parseInt( $( lbcDataArray.get( 0 ) ).text().replace( /\s/g, '' ), 10 ),
                 CityLBC: $( lbcDataArray.get( 1 ) ).text().trim().toLowerCase().replace( /\_|\s/g, '-' ),
-                CodePostal: $( lbcDataArray.get( 1 ) ).text().trim().toLowerCase().split( ' ' ),
+                CodePostal: $( lbcDataArray.get( 1 ) ).text().trim().toLowerCase().split( ' ' )[1],
                 TypeLBC: $( lbcDataArray.get( 2 ) ).text().trim().toLowerCase(),
                 SurfaceLBC: parseInt( $( lbcDataArray.get( 4 ) ).text().replace( /\s/g, '' ), 10 )
             }
@@ -58,8 +57,7 @@ function callLeboncoin() {
 
 // Creating a function which take the needed values 
 // However it's not automatic 
-function CallMA() {
-    var urlMA = 'https://www.meilleursagents.com/prix-immobilier/epinay-sous-senart-91860/'
+function CallMA( urlMA ) {
 
     request( urlMA, function ( error, response, html ) {
         if ( !error && response.statusCode == 200 ) {
@@ -76,13 +74,16 @@ function CallMA() {
             prixMoy_MA_Maison = priceData.PriceHouseMA;
             prixMens_MA_Loyer = priceData.MediumPriceMA;
             console.log( 'data_ma', priceData )
+            //return prixMoy_MA_Appartement, prixMoy_MA_Maison, prixMens_MA_Loyer;
+            return this;
         }
     });
+
 };
 
 // Creating a function that compares the different price, and return the conclusion
-function Compare() {
-    request( 'https://www.meilleursagents.com/prix-immobilier/epinay-sous-senart-91860/', function ( error, response, html ) {
+function Compare( urlMA ) {
+    request( urlMA, function ( error, response, html ) {
         if ( !error && response.statusCode == 200 ) {
 
             if ( type = 'Appartment' ) {
@@ -110,10 +111,13 @@ function Compare() {
 
 //makes the server respond to the '/' route and serving the 'home.ejs' template in the 'views' directory
 app.get( '/', function ( req, res ) {
+
     var url = req.query.urlLBC
-    callLeboncoin();
-    CallMA();
-    Compare();
+    url = callLeboncoin( url );
+
+    var urlMA = 'https://www.meilleursagents.com/prix-immobilier/' + city + '/'
+    CallMA( urlMA );
+    Compare( urlMA );
 
     res.render( 'home', {
         message: url,
