@@ -23,11 +23,10 @@ var msg = '';
 app.set( 'view engine', 'ejs' );
 app.use( '/assets', express.static( 'assets' ) );
 
-// Creating a function which take the needed values 
-// However it's not automatic 
+// Creating a function which take the needed values in leBonCoin
+// The function take the url as paramaters to make it automatic 
+// The user put the url as parameter
 function callLeboncoin( url ) {
-    //creating a var for the url
-
     request( url, function ( error, response, html ) {
         if ( !error && response.statusCode == 200 ) {
             var $ = cheerio.load( html )
@@ -55,8 +54,9 @@ function callLeboncoin( url ) {
     })
 }
 
-// Creating a function which take the needed values 
-// However it's not automatic 
+// Creating a function which take the needed values in MeilleurAgents
+// The function take the url as paramaters to make it automatic 
+// The user put the url as parameter
 function CallMA( urlMA ) {
 
     request( urlMA, function ( error, response, html ) {
@@ -74,11 +74,9 @@ function CallMA( urlMA ) {
             prixMoy_MA_Maison = priceData.PriceHouseMA;
             prixMens_MA_Loyer = priceData.MediumPriceMA;
             console.log( 'data_ma', priceData )
-            //return prixMoy_MA_Appartement, prixMoy_MA_Maison, prixMens_MA_Loyer;
             return this;
         }
     });
-
 };
 
 // Creating a function that compares the different price, and return the conclusion
